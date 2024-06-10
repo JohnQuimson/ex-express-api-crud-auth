@@ -7,7 +7,10 @@ const hashPassword = async (password) => {
 };
 
 const comparePassword = async (password, hashPassword) => {
-  const isPasswordValid = await bcrypt.compare(password, hashPassword);
+  const isPasswordValid = await bcrypt.compare(
+    password + process.env.PEPPER_KEY,
+    hashPassword
+  );
   return isPasswordValid;
 };
 
