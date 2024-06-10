@@ -5,9 +5,12 @@
   },
   "dependencies": {
     "@prisma/client": "^5.15.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-validator": "^7.1.0"
+    "express-validator": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1"
   },
   "name": "prismajs-blog",
   "version": "1.0.0",
