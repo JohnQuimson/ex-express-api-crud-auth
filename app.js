@@ -8,11 +8,14 @@ const authRouter = require('./routers/auth.js');
 const errorHandler = require('./middlewares/errorHandler.js');
 const notFound = require('./middlewares/notFound.js');
 const app = express();
+const cors = require('cors');
 
 const dotenv = require('dotenv');
 dotenv.config();
 const { PORT } = process.env;
 const port = PORT || 3000;
+
+app.use(cors());
 
 app.use(express.json());
 
