@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "nodemon": "^3.1.3",
+    "prisma": "^5.15.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.15.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0"
+  },
+  "name": "prismajs-blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "prisma migrate dev --name",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "<h1 align=\"center\">"
+}
