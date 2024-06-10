@@ -13,16 +13,23 @@ const generateSlug = (title) => {
 };
 
 const store = async (req, res) => {
-  const { title, content, published } = req.body;
+  const { title, content, published, categoryId, tags } = req.body;
 
   const slug = generateSlug(title);
 
   const data = {
     title,
-    content,
     slug,
+    content,
     published,
+    tags: {
+      connect: tags.map((id) => ({ id })),
+    },
   };
+
+  if (categoryId) {
+    data.categoryId = parseInt(categoryId, 10);
+  }
 
   try {
     const post = await prisma.post.create({ data });

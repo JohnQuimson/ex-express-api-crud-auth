@@ -74,17 +74,17 @@ const bodyData = {
     custom: {
       options: async (ids) => {
         if (ids.length === 0) {
-          throw new Error(`Una pizza deve avere almeno un ingrediente`);
+          throw new Error(`Un post deve avere almeno un tag`);
         }
         const notIntegerId = ids.find((id) => isNaN(parseInt(id)));
         if (notIntegerId) {
           throw new Error(`Uno o più ID non sono dei numeri interi.`);
         }
-        const tags = await prisma.ingredient.findMany({
+        const tags = await prisma.tag.findMany({
           where: { id: { in: ids } },
         });
         if (tags.length !== ids.length) {
-          throw new Error(`Uno o più ingredienti specificati non esistono.`);
+          throw new Error(`Uno o più tag specificati non esistono.`);
         }
         return true;
       },
