@@ -32,7 +32,12 @@ const store = async (req, res) => {
   }
 
   try {
-    const post = await prisma.post.create({ data });
+    const post = await prisma.post.create({
+      data,
+      include: {
+        tags: true,
+      },
+    });
     res.status(200).send(post);
   } catch (err) {
     errorHandlerFunction(res, err);
@@ -44,11 +49,14 @@ const show = async (req, res) => {
     const { slug } = req.params;
     const post = await prisma.post.findUnique({
       where: { slug: slug },
+      include: {
+        tags: true,
+      },
     });
     if (post) {
       res.json(post);
     } else {
-      throw new RestError(`post con slug ${slug} non trovato.`, 404);
+      throw new RestError(`Post con slug ${slug} non trovato.`, 404);
     }
   } catch (err) {
     errorHandlerFunction(res, err);
@@ -61,7 +69,7 @@ const index = async (req, res) => {
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 5;
 
-    const offset = (page - 1) * limit; // elementi da saltare per la visualiz.
+    const offset = (page - 1) * limit; // elementi da saltare per la visualizzazione
 
     // filtro per pubblicazione
     const where = {};
@@ -75,6 +83,9 @@ const index = async (req, res) => {
       where,
       take: limit,
       skip: offset,
+      include: {
+        tags: true,
+      },
     });
 
     res.json({ data: posts });
@@ -101,6 +112,9 @@ const update = async (req, res) => {
     const post = await prisma.post.update({
       where: { slug: slug },
       data,
+      include: {
+        tags: true,
+      },
     });
     res.json(post);
   } catch (err) {
