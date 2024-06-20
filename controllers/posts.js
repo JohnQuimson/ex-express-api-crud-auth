@@ -63,13 +63,43 @@ const show = async (req, res) => {
   }
 };
 
+// ---------------- with pagination -----------------------
+
+// const index = async (req, res) => {
+//   try {
+//     let { page, limit, published } = req.query;
+//     page = parseInt(page) || 1;
+//     limit = parseInt(limit) || 5;
+
+//     const offset = (page - 1) * limit; // elementi da saltare per la visualizzazione
+
+//     // filtro per pubblicazione
+//     const where = {};
+//     if (published === 'true') {
+//       where.published = true;
+//     } else if (published === 'false') {
+//       where.published = false;
+//     }
+
+//     const posts = await prisma.post.findMany({
+//       where,
+//       take: limit,
+//       skip: offset,
+//       include: {
+//         tags: true,
+//       },
+//     });
+
+//     res.json({ data: posts });
+//   } catch (error) {
+//     console.error('Qualcosa è andato storto', error);
+//     res.status(500).send('Errore durante il recupero dei post');
+//   }
+// };
+
 const index = async (req, res) => {
   try {
-    let { page, limit, published } = req.query;
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 5;
-
-    const offset = (page - 1) * limit; // elementi da saltare per la visualizzazione
+    let { published } = req.query;
 
     // filtro per pubblicazione
     const where = {};
@@ -81,10 +111,22 @@ const index = async (req, res) => {
 
     const posts = await prisma.post.findMany({
       where,
-      take: limit,
-      skip: offset,
       include: {
         tags: true,
+        category: true,
+
+        tags: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
       },
     });
 
