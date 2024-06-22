@@ -13,7 +13,7 @@ const generateSlug = (title) => {
 };
 
 const store = async (req, res) => {
-  const { title, content, published, categoryId, tags } = req.body;
+  const { title, content, categoryId, tags } = req.body;
 
   const slug = generateSlug(title);
 
@@ -21,9 +21,9 @@ const store = async (req, res) => {
     title,
     slug,
     content,
-    published,
+    published: req.body.published ? true : false,
     tags: {
-      connect: tags.map((id) => ({ id })),
+      connect: tags.map((id) => ({ id: parseInt(id) })),
     },
   };
 
@@ -31,16 +31,19 @@ const store = async (req, res) => {
     data.categoryId = parseInt(categoryId, 10);
   }
 
+  if (req.file) {
+    data.img = `${HOST}:${port}/post_pics/${req.file.filename}`;
+  }
+
   try {
-    const post = await prisma.post.create({
-      data,
-      include: {
-        tags: true,
-      },
-    });
+    // Creare un post
+    const post = await prisma.post.create({ data });
     res.status(200).send(post);
   } catch (err) {
-    errorHandlerFunction(res, err);
+    if (req.file) {
+      deletePic('post_pics', req.file.filename);
+    }
+    errorHandler(err, req, res);
   }
 };
 
